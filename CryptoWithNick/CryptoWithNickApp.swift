@@ -11,7 +11,12 @@ import SwiftUI
 struct CryptoWithNickApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            
+            ZStack {
+                Color.theme.background
+                    .ignoresSafeArea()
+                ContentView()
+            }
         }
     }
 }
