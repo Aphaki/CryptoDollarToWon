@@ -8,14 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
-    
     @State var showFortfolio = false
+    @StateObject var vm = ContentViewModel()
     
     var body: some View {
         VStack {
             headerView
+            List {
+                ForEach(vm.coins) { coin in
+                    CoinRowView(coin: coin)
+                }
+            }
             Spacer()
-        }
+        }.edgesIgnoringSafeArea(.bottom)
     }
 }
 extension ContentView {
@@ -45,6 +50,7 @@ extension ContentView {
 }
 
 struct ContentView_Previews: PreviewProvider {
+    
     static var previews: some View {
         Group {
             ContentView()

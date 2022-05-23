@@ -18,4 +18,5 @@ struct ColorTheme {
     let themeBlue = Color("BlueColor")
     let themeRed = Color("RedColor")
     let themeGreen = Color("GreenColor")
+    let themeSecondary = Color("SecondaryColor")
 }
