@@ -16,9 +16,10 @@ struct ContentView: View {
             headerView
             List {
                 ForEach(vm.coins) { coin in
-                    CoinRowView(coin: coin)
+                    CoinRowView(coin: coin, isFortfolio: $showFortfolio)
+                        .padding(.vertical, 10)
                 }
-            }
+            }.listStyle(.plain)
             Spacer()
         }.edgesIgnoringSafeArea(.bottom)
     }

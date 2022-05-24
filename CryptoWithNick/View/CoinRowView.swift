@@ -11,11 +11,16 @@ struct CoinRowView: View {
     
     let coin: CoinModel
     
+    @Binding var isFortfolio: Bool
+    
     var body: some View {
-            HStack(spacing: 0){
+        HStack(spacing: 0){
                 leftColumn
                 Spacer()
+            if isFortfolio{
                 centerColumn
+                    .animation(.none, value: isFortfolio)
+            }
                 rightColumn
             }
             .font(.subheadline)
@@ -27,7 +32,8 @@ struct CoinRowView: View {
 
 struct CoinRowView_Previews: PreviewProvider {    
     static var previews: some View {
-        CoinRowView(coin: dev.coin)
+        CoinRowView(coin: dev.coin, isFortfolio: .constant(false))
+            .padding()
             .previewLayout(.sizeThatFits)
     }
 }
@@ -37,13 +43,13 @@ extension CoinRowView {
         HStack(spacing: 0) {
             Text("\(coin.rank )")
                 .font(.caption)
-            .foregroundColor(Color.theme.themeSecondary)
-            Circle()
+                .foregroundColor(Color.theme.themeSecondary)
+                .frame(width: 25)
+            CoinImageView(coin: coin)
                 .frame(width: 30, height: 30)
                 .padding(.horizontal, 5)
             Text(coin.symbol.uppercased())
         }
-        
     }
 }
 extension CoinRowView {
@@ -52,15 +58,18 @@ extension CoinRowView {
             Text( ((Double(5)) * (coin.currentPrice )).asCurrencyWith2Demicals() ) // 갯수 * 가격
             Text("\(5)") // 갯수
         }.font(.caption)
-        .padding(.horizontal)
     }
 }
 extension CoinRowView {
     var rightColumn: some View {
         VStack(alignment: .trailing) {
-            Text( ((coin.currentPrice) ).asCurrencyWith2Demicals() ) // 현재 가격
+            HStack {
+                Spacer()
+                Text( ((coin.currentPrice) ).asCurrencyWith2Demicals() )
+            } // 현재 가격
             Text( (coin.priceChangePercentage24H ?? 0).asPercentString() )
         }
         .font(.caption)
+        .frame(width: UIScreen.main.bounds.width / 4)
     }
 }
