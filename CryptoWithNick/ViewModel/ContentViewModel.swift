@@ -11,6 +11,7 @@ import Combine
 class ContentViewModel: ObservableObject {
     
     @Published var coins: [CoinModel] = []
+    @Published var searchBarText: String = ""
     
    private let dataService = DataService()
    private var cancellable = Set<AnyCancellable>()

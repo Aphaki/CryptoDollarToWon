@@ -18,7 +18,6 @@ struct CircleButtonAnymationView: View {
             .animation(.easeInOut(duration: 1.0), value: animate)
     }
 }
-
 struct CircleButtonAnymationView_Previews: PreviewProvider {
     static var previews: some View {
         CircleButtonAnymationView(animate: .constant(false))

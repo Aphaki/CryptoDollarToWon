@@ -32,7 +32,7 @@ struct CoinRowView: View {
 
 struct CoinRowView_Previews: PreviewProvider {    
     static var previews: some View {
-        CoinRowView(coin: dev.coin, isFortfolio: .constant(false))
+        CoinRowView(coin: dev.coin, isFortfolio: .constant(true))
             .padding()
             .previewLayout(.sizeThatFits)
     }
@@ -55,8 +55,8 @@ extension CoinRowView {
 extension CoinRowView {
     var centerColumn: some View {
         VStack(alignment: .trailing) {
-            Text( ((Double(5)) * (coin.currentPrice )).asCurrencyWith2Demicals() ) // 갯수 * 가격
-            Text("\(5)") // 갯수
+            Text( ((coin.currentHoldings ?? 0) * (coin.currentPrice) ).asCurrencyWith2Demicals() ) // 갯수 * 가격
+            Text(coin.currentHoldings?.asNumberString() ?? "0") // 갯수
         }.font(.caption)
     }
 }
@@ -68,6 +68,7 @@ extension CoinRowView {
                 Text( ((coin.currentPrice) ).asCurrencyWith2Demicals() )
             } // 현재 가격
             Text( (coin.priceChangePercentage24H ?? 0).asPercentString() )
+                .foregroundColor( coin.priceChangePercentage24H ?? 0 >= 0 ? Color.green : Color.red )
         }
         .font(.caption)
         .frame(width: UIScreen.main.bounds.width / 4)

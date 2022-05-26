@@ -14,12 +14,16 @@ struct ContentView: View {
     var body: some View {
         VStack {
             headerView
+            SearchBarView(searchBarText: $vm.searchBarText)
+            columnTitles
             List {
-                ForEach(vm.coins) { coin in
-                    CoinRowView(coin: coin, isFortfolio: $showFortfolio)
-                        .padding(.vertical, 10)
+                VStack {
+                    ForEach(vm.coins) { coin in
+                        CoinRowView(coin: coin, isFortfolio: $showFortfolio)
+                            .padding(.vertical, 10)
+                    }
                 }
-            }.listStyle(.plain)
+            }.listStyle(PlainListStyle())
             Spacer()
         }.edgesIgnoringSafeArea(.bottom)
     }
@@ -41,12 +45,27 @@ extension ContentView {
             ButtonView(iconName: "chevron.right")
                 .rotationEffect(.degrees(!showFortfolio ? 0 : 180))
                 .onTapGesture {
-                    withAnimation {
+                    withAnimation(.spring()) {
                         showFortfolio.toggle()
                     }
                 }
         }
         .padding(.horizontal)
+    }
+}
+extension ContentView {
+    var columnTitles: some View {
+        HStack {
+            Text("Coin")
+                .foregroundColor(Color.theme.themeSecondary)
+                .font(.caption)
+                .padding(.leading, 20)
+            Spacer()
+            Text("Price")
+                .foregroundColor(Color.theme.themeSecondary)
+                .font(.caption)
+                .padding(.trailing, 20)
+        }.padding(.top, 10)
     }
 }
 

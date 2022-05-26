@@ -10,7 +10,6 @@ import SwiftUI
 import Combine
 
 class CoinImageVM: ObservableObject {
-    // 매개변수로 (coin) 받아 안의 프로퍼티 (url) 주소로 네트워킹
     
     @Published var isLoading = false
     @Published var coinImg: UIImage? = nil

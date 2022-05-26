@@ -13,26 +13,43 @@ class CoinImgDataService {
     
     @Published var coinImg: UIImage? = nil
     
-    var subscribtion: AnyCancellable?
-    
-    let coin: CoinModel
+    private var subscribtion: AnyCancellable?
+    private let fileManager = LocalFileManager.shared
+    private let coin: CoinModel
+    private let imageName: String
+    private let folderName: String = "coin_images"
     
     init(coin: CoinModel) {
         self.coin = coin
-        self.downloadCoinImg()
+        self.imageName = coin.id
+        getCoinImage()
     }
     
-    func downloadCoinImg() {
+    private func getCoinImage() {
+        if let savedImage = fileManager.getImgFromFile(imgName: imageName, folderName: folderName) {
+            coinImg = savedImage
+            print("Coin Image is fetched from Local File")
+        } else {
+            downloadCoinImg()
+            print("Coin Image is downloaded")
+        }
+    }
+    
+    private func downloadCoinImg() {
         guard let url = URL(string: coin.image) else { return }
-        
         subscribtion = NetworkingManager.download(url: url)
             .tryMap{ data -> UIImage? in
                 return UIImage(data: data)
             }
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: NetworkingManager.completionHandler) {[weak self] img in
-                self?.coinImg = img
-                self?.subscribtion?.cancel()
+                guard
+                    let self = self,
+                    let downloadedImg = img
+                else { return }
+                self.coinImg = img
+                self.subscribtion?.cancel()
+                self.fileManager.saveImage(image: downloadedImg, folderName: self.folderName, imgName: self.imageName)
             }
     }
 }
