@@ -21,9 +21,27 @@ class ContentViewModel: ObservableObject {
     }
     
     func subscribeService() {
-        dataService.$coins.sink {[weak self] coins in
-            self?.coins = coins
-        }.store(in: &cancellable)
+        
+        $searchBarText
+            .combineLatest(dataService.$coins)
+            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
+            .map(coinFiltering)
+            .sink { [weak self] returnedCoins in
+                self?.coins = returnedCoins
+            }.store(in: &cancellable)
+    }
+    
+    private func coinFiltering(text: String, startingCoins: [CoinModel]) -> [CoinModel] {
+        guard !text.isEmpty else {
+            return startingCoins
+        }
+        let lowercasedText = text.lowercased()
+        let filteredCoins = startingCoins.filter { coin in
+           return coin.id.lowercased().contains(lowercasedText) ||
+           coin.symbol.lowercased().contains(lowercasedText) ||
+           coin.name.lowercased().contains(lowercasedText)
+        }
+        return filteredCoins
     }
     
 }
