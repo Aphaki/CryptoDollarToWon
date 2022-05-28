@@ -16,19 +16,21 @@ struct CoinImageView: View {
     }
     
     var body: some View {
-        if let image = vm.coinImg {
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFit()
-        } else if vm.isLoading{
-            ProgressView()
-                .scaledToFit()
-        } else {
-            Image(systemName: "xmark.circle.fill")
-                .resizable()
-                .scaledToFit()
-        }
         
+        ZStack {
+            if let image = vm.coinImg {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+            } else if vm.isLoading{
+                ProgressView()
+                    .scaledToFit()
+            } else {
+                Image(systemName: "xmark.circle.fill")
+                    .resizable()
+                    .scaledToFit()
+            }
+        }
     }
 }
 

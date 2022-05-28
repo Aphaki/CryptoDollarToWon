@@ -16,16 +16,19 @@ struct ContentView: View {
             headerView
             SearchBarView(searchBarText: $vm.searchBarText)
             columnTitles
-            List {
-                VStack {
-                    ForEach(vm.coins) { coin in
-                        CoinRowView(coin: coin, isFortfolio: $showFortfolio)
-                            .padding(.vertical, 10)
-                    }
+            if !showFortfolio {
+                allCoinLists
+                .transition(.move(edge: .leading))
+            } else {
+                ZStack(alignment: .top) {
+                    fortfolioLists
+                        .transition(.move(edge: .trailing))
                 }
-            }.listStyle(PlainListStyle())
-            Spacer()
-        }.edgesIgnoringSafeArea(.bottom)
+                    
+                
+            }
+            
+        }
     }
 }
 extension ContentView {
@@ -61,11 +64,32 @@ extension ContentView {
                 .font(.caption)
                 .padding(.leading, 20)
             Spacer()
+            if showFortfolio {
+                Text("Holding")
+                    .foregroundColor(Color.theme.themeSecondary)
+                    .font(.caption)
+                    .padding(.trailing, 10)
+            }
             Text("Price")
                 .foregroundColor(Color.theme.themeSecondary)
                 .font(.caption)
                 .padding(.trailing, 20)
+                .frame(width: UIScreen.main.bounds.width / 4)
         }.padding(.top, 10)
+    }
+    var allCoinLists: some View {
+        List {
+            ForEach(vm.coins) { coin in
+                CoinRowView(coin: coin, isFortfolio: false)
+                    .padding(.vertical, 10)
+            }
+        }.listStyle(PlainListStyle())
+    }
+    var fortfolioLists: some View {
+        List {
+            CoinRowView(coin: DeveloperPreview.shared.coin, isFortfolio: true)
+                .padding(.vertical, 10)
+        }.listStyle(PlainListStyle())
     }
 }
 

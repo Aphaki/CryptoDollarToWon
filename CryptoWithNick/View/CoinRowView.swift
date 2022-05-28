@@ -11,7 +11,7 @@ struct CoinRowView: View {
     
     let coin: CoinModel
     
-    @Binding var isFortfolio: Bool
+    let isFortfolio: Bool
     
     var body: some View {
         HStack(spacing: 0){
@@ -32,7 +32,7 @@ struct CoinRowView: View {
 
 struct CoinRowView_Previews: PreviewProvider {    
     static var previews: some View {
-        CoinRowView(coin: dev.coin, isFortfolio: .constant(true))
+        CoinRowView(coin: dev.coin, isFortfolio: true)
             .padding()
             .previewLayout(.sizeThatFits)
     }
