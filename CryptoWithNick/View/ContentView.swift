@@ -9,11 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
     @State var showFortfolio = false
-    @StateObject var vm = ContentViewModel()
+    @EnvironmentObject var vm: ContentViewModel
     
     var body: some View {
         VStack {
             headerView
+            HomeStatsView(showPortfolio: $showFortfolio)
+                .padding()
             SearchBarView(searchBarText: $vm.searchBarText)
             columnTitles
             if !showFortfolio {
@@ -98,7 +100,9 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             ContentView()
+                .environmentObject(dev.homeVM)
             ContentView()
+                .environmentObject(dev.homeVM)
                 .preferredColorScheme(.dark)
         }
         
