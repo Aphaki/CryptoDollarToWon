@@ -12,15 +12,11 @@ class ContentViewModel: ObservableObject {
     
     @Published var coins: [CoinModel] = []
     @Published var searchBarText: String = ""
-    @Published var statistics: [StatisticModel] = [
-        StatisticModel(title: "Title", value: "Value", percentageChange: 1.1),
-        StatisticModel(title: "Title", value: "Value"),
-        StatisticModel(title: "Title", value: "Value", percentageChange: 4.2),
-        StatisticModel(title: "Title", value: "Value", percentageChange: -2.7)
-    ]
+    @Published var statistics: [StatisticModel] = []
     
     
    private let dataService = DataService()
+   private let marketDataService = MarketDataService()
    private var cancellable = Set<AnyCancellable>()
     
     init() {
@@ -36,6 +32,36 @@ class ContentViewModel: ObservableObject {
             .sink { [weak self] returnedCoins in
                 self?.coins = returnedCoins
             }.store(in: &cancellable)
+        
+        marketDataService.$marketData
+            .map(mappingMarketData)
+            .sink { [weak self] stats in
+                self?.statistics = stats
+            }
+            .store(in: &cancellable)
+    }
+    
+    private func mappingMarketData (marketData: DataClass?) -> [StatisticModel] {
+        var stats: [StatisticModel] = []
+        guard let data = marketData else {
+            return stats
+        }
+        
+        let marketCap = StatisticModel(title: "Market Cap",
+                                       value: data.marketCap,
+                                       percentageChange: data.marketCapChangePercentage24HUsd)
+        let volume = StatisticModel(title: "24h Volume", value: data.volume)
+        let btcDominance = StatisticModel(title: "BTC Dominance", value: data.btcDominance)
+        let portfolio = StatisticModel(title: "Portfolio", value: "$0.00", percentageChange: 0.00)
+        
+        stats.append(contentsOf: [
+             marketCap,
+             volume,
+             btcDominance,
+             portfolio
+        ])
+        return stats
+        
     }
     
     private func coinFiltering(text: String, startingCoins: [CoinModel]) -> [CoinModel] {
