@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State var showFortfolio = false
+    @State var showFortfolioView = false
     @EnvironmentObject var vm: ContentViewModel
     
     var body: some View {
@@ -17,6 +18,7 @@ struct ContentView: View {
             HomeStatsView(showPortfolio: $showFortfolio)
                 .padding()
             SearchBarView(searchBarText: $vm.searchBarText)
+                .padding(.horizontal, 10)
             columnTitles
             if !showFortfolio {
                 allCoinLists
@@ -26,10 +28,10 @@ struct ContentView: View {
                     fortfolioLists
                         .transition(.move(edge: .trailing))
                 }
-                    
-                
             }
-            
+        }.sheet(isPresented: $showFortfolioView) {
+            PortfolioView()
+                .environmentObject(vm)
         }
     }
 }
@@ -38,6 +40,11 @@ extension ContentView {
         HStack {
             ButtonView(iconName: !showFortfolio ? "info" : "plus")
                 .animation(.none, value: showFortfolio)
+                .onTapGesture {
+                    if showFortfolio {
+                        showFortfolioView.toggle()
+                    }
+                }
                 .background(
                 CircleButtonAnymationView(animate: $showFortfolio)
                 )
@@ -45,6 +52,7 @@ extension ContentView {
             Text(!showFortfolio ? "Live Prices" : "Fortfolio")
                 .font(.headline)
                 .fontWeight(.heavy)
+                .foregroundColor(Color.theme.accent)
                 .animation(.none, value: showFortfolio)
             Spacer()
             ButtonView(iconName: "chevron.right")
@@ -89,8 +97,11 @@ extension ContentView {
     }
     var fortfolioLists: some View {
         List {
-            CoinRowView(coin: DeveloperPreview.shared.coin, isFortfolio: true)
-                .padding(.vertical, 10)
+            ForEach(vm.portfolioCoins) { coin in
+                CoinRowView(coin: coin, isFortfolio: true)
+                    .padding(.vertical, 10)
+            }
+            
         }.listStyle(PlainListStyle())
     }
 }

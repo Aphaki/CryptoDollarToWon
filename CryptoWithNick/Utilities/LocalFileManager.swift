@@ -13,7 +13,7 @@ class LocalFileManager {
    static let shared = LocalFileManager()
     
     init () { }
-    
+     
     func getImgFromFile(imgName: String, folderName: String) -> UIImage? {
         guard
             let imgURL = getImageURL(folderName: folderName, imageName: imgName),
