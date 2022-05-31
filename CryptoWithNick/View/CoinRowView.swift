@@ -49,6 +49,8 @@ extension CoinRowView {
                 .frame(width: 30, height: 30)
                 .padding(.horizontal, 5)
             Text(coin.symbol.uppercased())
+                .font(.headline)
+                .foregroundColor(Color.theme.accent)
         }
     }
 }
