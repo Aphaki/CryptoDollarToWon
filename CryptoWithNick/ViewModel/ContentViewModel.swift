@@ -44,17 +44,9 @@ class ContentViewModel: ObservableObject {
         // 포트폴리오 코인 업데이트
         $coins
             .combineLatest(portfolioDataService.$savedEntities)
-            .map { (coinModels, portfolioEntitys) -> [CoinModel] in
-                coinModels
-                    .compactMap { coin -> CoinModel? in
-                        guard
-                            let entity = portfolioEntitys.first(where: { $0.coinID == coin.id })
-                            else { return nil }
-                        return coin.updateHoldings(amount: entity.amount)
-                     }
-                }
-            .sink { [weak self] filteredCoin in
-                self?.portfolioCoins = filteredCoin
+            .map(filteringPortfolioCoins)
+            .sink { [weak self] filteredCoins in
+                self?.portfolioCoins = filteredCoins
             }
             .store(in: &cancellable)
     }
@@ -63,6 +55,15 @@ class ContentViewModel: ObservableObject {
         portfolioDataService.updatePortfolio(coin: coin, amount: amount)
     }
     
+    private func filteringPortfolioCoins(coinModels: [CoinModel], portfolioEntitys: [PortfolioEntity]) -> [CoinModel] {
+        coinModels
+            .compactMap { coin -> CoinModel? in
+                guard
+                    let entity = portfolioEntitys.first(where: { $0.coinID == coin.id })
+                    else { return nil }
+                return coin.updateHoldings(amount: entity.amount)
+             }
+    }
     
     private func mappingMarketData (marketData: DataClass?) -> [StatisticModel] {
         var stats: [StatisticModel] = []
