@@ -69,22 +69,51 @@ extension ContentView {
 extension ContentView {
     var columnTitles: some View {
         HStack {
-            Text("Coin")
-                .foregroundColor(Color.theme.themeSecondary)
-                .font(.caption)
-                .padding(.leading, 20)
-            Spacer()
-            if showFortfolio {
-                Text("Holding")
+            Group {
+                Text("Coin")
                     .foregroundColor(Color.theme.themeSecondary)
                     .font(.caption)
-                    .padding(.trailing, 10)
+                    .padding(.leading, 20)
+                Image(systemName: "chevron.up")
+                    .foregroundColor(Color.theme.themeSecondary)
+                    .font(.caption)
+                    .rotationEffect(Angle(degrees: vm.sortOption == .rank ? 180 : 0))
+                    .opacity(vm.sortOption == .rank || vm.sortOption == .rankReversed
+                             ? 1.0 : 0.0)
+            }.onTapGesture {
+                vm.sortOption = (vm.sortOption == .rank ? .rankReversed : .rank)
             }
-            Text("Price")
-                .foregroundColor(Color.theme.themeSecondary)
-                .font(.caption)
-                .padding(.trailing, 20)
-                .frame(width: UIScreen.main.bounds.width / 4)
+            Spacer()
+            if showFortfolio {
+                HStack(spacing: 5) {
+                    Text("Holding")
+                        .foregroundColor(Color.theme.themeSecondary)
+                        .font(.caption)
+                    Image(systemName: "chevron.up")
+                        .foregroundColor(Color.theme.themeSecondary)
+                        .font(.caption)
+                        .rotationEffect(Angle(degrees: vm.sortOption == .holdings ? 180 : 0))
+                        .opacity(vm.sortOption == .holdings || vm.sortOption == .holdingsReversed
+                                 ? 1.0 : 0.0)
+                }.onTapGesture {
+                    vm.sortOption = (vm.sortOption == .holdings ? .holdingsReversed : .holdings)
+                }
+            }
+            HStack {
+                Text("Price")
+                    .foregroundColor(Color.theme.themeSecondary)
+                    .font(.caption)
+                Image(systemName: "chevron.up")
+                    .foregroundColor(Color.theme.themeSecondary)
+                    .font(.caption)
+                    .rotationEffect(Angle(degrees: vm.sortOption == .price ? 180 : 0))
+                    .opacity(vm.sortOption == .price || vm.sortOption == .priceReversed
+                             ? 1.0 : 0.0)
+            }.frame(width: UIScreen.main.bounds.width / 4)
+            .padding(.horizontal, 10)
+            .onTapGesture {
+                vm.sortOption = (vm.sortOption == .price ? .priceReversed : .price)
+            }
         }.padding(.top, 10)
     }
     var allCoinLists: some View {
