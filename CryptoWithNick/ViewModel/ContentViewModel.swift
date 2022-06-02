@@ -15,6 +15,7 @@ class ContentViewModel: ObservableObject {
     @Published var searchBarText: String = ""
     @Published var statistics: [StatisticModel] = []
     @Published var sortOption: SortOption = .holdings
+    @Published var isLoading: Bool = false
     
     
     private let dataService = DataService()
@@ -28,6 +29,13 @@ class ContentViewModel: ObservableObject {
     
     init() {
         subscribeService()
+    }
+    
+    func reload() {
+        isLoading = true
+        dataService.fetchCoins()
+        marketDataService.fetchData()
+        HapticManager.notification(type: .success)
     }
     
     func subscribeService() {
@@ -56,7 +64,9 @@ class ContentViewModel: ObservableObject {
             .combineLatest($portfolioCoins)
             .map(mappingMarketData)
             .sink { [weak self] stats in
-                self?.statistics = stats
+                guard let self = self else { return }
+                self.statistics = stats
+                self.isLoading = false
             }
             .store(in: &cancellable)
         

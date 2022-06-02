@@ -36,6 +36,7 @@
 		7FBBAA84283F470500697868 /* LocalFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBBAA83283F470500697868 /* LocalFileManager.swift */; };
 		7FBBAA86283F5C2300697868 /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBBAA85283F5C2300697868 /* SearchBarView.swift */; };
 		7FBBAA88283F63C600697868 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBBAA87283F63C600697868 /* UIApplication.swift */; };
+		7FC3704428489E960029CD49 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC3704328489E960029CD49 /* HapticManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +71,7 @@
 		7FBBAA83283F470500697868 /* LocalFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileManager.swift; sourceTree = "<group>"; };
 		7FBBAA85283F5C2300697868 /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
 		7FBBAA87283F63C600697868 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
+		7FC3704328489E960029CD49 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +138,7 @@
 			children = (
 				7F335C3328378DE10052C3CE /* NetworkingManager.swift */,
 				7FBBAA83283F470500697868 /* LocalFileManager.swift */,
+				7FC3704328489E960029CD49 /* HapticManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -264,6 +267,7 @@
 			files = (
 				7F5200DC284369B70047D623 /* StatisticModel.swift in Sources */,
 				7FA832AC284598A90077B610 /* PortfolioDataService.swift in Sources */,
+				7FC3704428489E960029CD49 /* HapticManager.swift in Sources */,
 				7F9A50B52844BC3600CA70CC /* CoinLogoView.swift in Sources */,
 				7F8297722843924300A48C9D /* MarketDataService.swift in Sources */,
 				7F5200DE28436AFA0047D623 /* StatisticView.swift in Sources */,

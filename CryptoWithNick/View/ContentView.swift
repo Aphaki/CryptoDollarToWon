@@ -100,21 +100,34 @@ extension ContentView {
                 }
             }
             HStack {
-                Text("Price")
-                    .foregroundColor(Color.theme.themeSecondary)
-                    .font(.caption)
-                Image(systemName: "chevron.up")
-                    .foregroundColor(Color.theme.themeSecondary)
-                    .font(.caption)
-                    .rotationEffect(Angle(degrees: vm.sortOption == .price ? 180 : 0))
-                    .opacity(vm.sortOption == .price || vm.sortOption == .priceReversed
-                             ? 1.0 : 0.0)
-            }.frame(width: UIScreen.main.bounds.width / 4)
-            .padding(.horizontal, 10)
-            .onTapGesture {
-                vm.sortOption = (vm.sortOption == .price ? .priceReversed : .price)
-            }
-        }.padding(.top, 10)
+                HStack {
+                    Text("Price")
+                        .foregroundColor(Color.theme.themeSecondary)
+                        .font(.caption)
+                    Image(systemName: "chevron.up")
+                        .foregroundColor(Color.theme.themeSecondary)
+                        .font(.caption)
+                        .rotationEffect(Angle(degrees: vm.sortOption == .price ? 180 : 0))
+                        .opacity(vm.sortOption == .price || vm.sortOption == .priceReversed
+                                 ? 1.0 : 0.0)
+                }
+                .onTapGesture {
+                    vm.sortOption = (vm.sortOption == .price ? .priceReversed : .price)
+                }
+                Button {
+                    withAnimation(.linear(duration: 2.0)) {
+                        vm.reload()
+                    }
+                } label: {
+                    Image(systemName: "goforward")
+                        .font(.caption)
+                        .foregroundColor(Color.theme.themeSecondary)
+                        .rotationEffect(Angle(degrees: vm.isLoading ? 360 : 0))
+                }.padding(.trailing, 20)
+            } // Price + 정렬버튼 + 새로고침버튼
+            .frame(width: UIScreen.main.bounds.width / 4 + 10)
+        }
+        .padding(.top, 10)
     }
     var allCoinLists: some View {
         List {
