@@ -60,6 +60,7 @@ extension CoinRowView {
             Text( ((coin.currentHoldings ?? 0) * (coin.currentPrice) ).asCurrencyWith2Demicals() ) // 갯수 * 가격
             Text(coin.currentHoldings?.asNumberString() ?? "0") // 갯수
         }.font(.caption)
+            .frame(width: UIScreen.main.bounds.width / 4, alignment: .trailing)
     }
 }
 extension CoinRowView {

@@ -95,7 +95,8 @@ extension ContentView {
                         .rotationEffect(Angle(degrees: vm.sortOption == .holdings ? 180 : 0))
                         .opacity(vm.sortOption == .holdings || vm.sortOption == .holdingsReversed
                                  ? 1.0 : 0.0)
-                }.onTapGesture {
+                }.frame(width: UIScreen.main.bounds.width / 4, alignment: .leading)
+                .onTapGesture {
                     vm.sortOption = (vm.sortOption == .holdings ? .holdingsReversed : .holdings)
                 }
             }
