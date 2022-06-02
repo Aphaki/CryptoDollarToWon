@@ -16,10 +16,10 @@ class ContentViewModel: ObservableObject {
     @Published var statistics: [StatisticModel] = []
     
     
-   private let dataService = DataService()
-   private let marketDataService = MarketDataService()
+    private let dataService = DataService()
+    private let marketDataService = MarketDataService()
     private let portfolioDataService = PortfolioDataService()
-   private var cancellable = Set<AnyCancellable>()
+    private var cancellable = Set<AnyCancellable>()
     
     init() {
         subscribeService()
@@ -63,9 +63,9 @@ class ContentViewModel: ObservableObject {
             .compactMap { coin -> CoinModel? in
                 guard
                     let entity = portfolioEntitys.first(where: { $0.coinID == coin.id })
-                    else { return nil }
+                else { return nil }
                 return coin.updateHoldings(amount: entity.amount)
-             }
+            }
     }
     
     private func mappingMarketData (marketData: DataClass?, portfolioCoins: [CoinModel]) -> [StatisticModel] {
@@ -92,14 +92,14 @@ class ContentViewModel: ObservableObject {
         }.reduce(0, +)
         
         let percentageChange = ((portfolioValue - previousValue) / previousValue)
-
+        
         let portfolio = StatisticModel(title: "Portfolio", value: portfolioValue.asCurrencyWith2Demicals(), percentageChange: percentageChange)
         
         stats.append(contentsOf: [
-             marketCap,
-             volume,
-             btcDominance,
-             portfolio
+            marketCap,
+            volume,
+            btcDominance,
+            portfolio
         ])
         return stats
         
@@ -111,9 +111,9 @@ class ContentViewModel: ObservableObject {
         }
         let lowercasedText = text.lowercased()
         let filteredCoins = startingCoins.filter { coin in
-           return coin.id.lowercased().contains(lowercasedText) ||
-           coin.symbol.lowercased().contains(lowercasedText) ||
-           coin.name.lowercased().contains(lowercasedText)
+            return coin.id.lowercased().contains(lowercasedText) ||
+            coin.symbol.lowercased().contains(lowercasedText) ||
+            coin.name.lowercased().contains(lowercasedText)
         }
         return filteredCoins
     }
