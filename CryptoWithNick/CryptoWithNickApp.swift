@@ -19,11 +19,10 @@ struct CryptoWithNickApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ZStack {
-                Color.theme.background
-                    .ignoresSafeArea()
+            NavigationView {
                 ContentView()
                     .environmentObject(vm)
+                    .navigationBarHidden(true)
             }
         }
     }

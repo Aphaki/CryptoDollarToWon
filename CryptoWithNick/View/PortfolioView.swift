@@ -19,33 +19,38 @@ struct PortfolioView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(alignment: .leading) {
-                    SearchBarView(searchBarText: $vm.searchBarText)
-                        .padding(.vertical, 20)
-                    coinLogoList
-                    
-                    if selectedCoin != nil {
-                        portfolioInputSection
+            ZStack {
+                Color.theme.background
+                    .ignoresSafeArea()
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        SearchBarView(searchBarText: $vm.searchBarText)
+                            .padding(.vertical, 20)
+                        coinLogoList
+                        
+                        if selectedCoin != nil {
+                            portfolioInputSection
+                        }
                     }
                 }
-            }
-            .navigationTitle("Edit Portfolio")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Image(systemName: "xmark.circle")
-                        .onTapGesture { dismiss() }
+                .navigationTitle("Edit Portfolio")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Image(systemName: "xmark.circle")
+                            .onTapGesture { dismiss() }
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        trailingNavBarButtons
+                    }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    trailingNavBarButtons
-                }
-            }
-            .onChange(of: vm.searchBarText, perform: { value in
-                if value == "" {
-                    removeSelectedCoin()
-                }
-            })
+                .onChange(of: vm.searchBarText, perform: { value in
+                    if value == "" {
+                        removeSelectedCoin()
+                    }
+                })
+            } //ZStack
+            
         } //NavigationView
     }
 }

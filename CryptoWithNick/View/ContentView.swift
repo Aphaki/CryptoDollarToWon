@@ -8,31 +8,47 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var showFortfolio = false
-    @State var showFortfolioView = false
-    @EnvironmentObject var vm: ContentViewModel
+    @State private var showDetailView: Bool = false
+    @State private var selectedCoin: CoinModel? = nil
+    @State private var showFortfolio = false
+    @State private var showFortfolioView = false
+    @EnvironmentObject private var vm: ContentViewModel
     
     var body: some View {
-        VStack {
-            headerView
-            HomeStatsView(showPortfolio: $showFortfolio)
-                .padding()
-            SearchBarView(searchBarText: $vm.searchBarText)
-                .padding(.horizontal, 10)
-            columnTitles
-            if !showFortfolio {
-                allCoinLists
-                .transition(.move(edge: .leading))
-            } else {
-                ZStack(alignment: .top) {
-                    fortfolioLists
-                        .transition(.move(edge: .trailing))
+        ZStack {
+            Color.theme.background
+                .ignoresSafeArea()
+                .sheet(isPresented: $showFortfolioView) {
+                    PortfolioView()
+                        .environmentObject(vm)
+                }
+                .background(
+                    NavigationLink(isActive: $showDetailView,
+                                   destination: { DetailLoadingView(coin: $selectedCoin) },
+                                   label: {EmptyView()})
+                )
+            VStack {
+                headerView
+                    .padding(.horizontal, 10)
+                HomeStatsView(showPortfolio: $showFortfolio)
+                    .padding()
+                SearchBarView(searchBarText: $vm.searchBarText)
+                    .padding(.horizontal, 20)
+                columnTitles
+                if !showFortfolio {
+                    allCoinLists
+                    .transition(.move(edge: .leading))
+                    .padding(.horizontal, 10)
+                } else {
+                    ZStack(alignment: .top) {
+                        fortfolioLists
+                            .padding(.horizontal, 10)
+                            .transition(.move(edge: .trailing))
+                    }
                 }
             }
-        }.sheet(isPresented: $showFortfolioView) {
-            PortfolioView()
-                .environmentObject(vm)
         }
+        
     }
 }
 extension ContentView {
@@ -65,15 +81,13 @@ extension ContentView {
         }
         .padding(.horizontal)
     }
-}
-extension ContentView {
     var columnTitles: some View {
-        HStack {
-            Group {
+        HStack(spacing: 0) {
+            HStack {
                 Text("Coin")
                     .foregroundColor(Color.theme.themeSecondary)
                     .font(.caption)
-                    .padding(.leading, 20)
+                    .padding(.leading , 30)
                 Image(systemName: "chevron.up")
                     .foregroundColor(Color.theme.themeSecondary)
                     .font(.caption)
@@ -100,7 +114,7 @@ extension ContentView {
                     vm.sortOption = (vm.sortOption == .holdings ? .holdingsReversed : .holdings)
                 }
             }
-            HStack {
+            HStack(spacing: 0) {
                 HStack {
                     Text("Price")
                         .foregroundColor(Color.theme.themeSecondary)
@@ -135,6 +149,11 @@ extension ContentView {
             ForEach(vm.coins) { coin in
                 CoinRowView(coin: coin, isFortfolio: false)
                     .padding(.vertical, 10)
+                    .listRowBackground(Color.theme.background)
+                    .onTapGesture {
+                        selectedCoin = coin
+                        showDetailView.toggle()
+                    }
             }
         }.listStyle(PlainListStyle())
     }
@@ -143,6 +162,7 @@ extension ContentView {
             ForEach(vm.portfolioCoins) { coin in
                 CoinRowView(coin: coin, isFortfolio: true)
                     .padding(.vertical, 10)
+                    .listRowBackground(Color.theme.background)
             }
             
         }.listStyle(PlainListStyle())
