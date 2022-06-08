@@ -31,7 +31,5 @@ class CoinDetailDataService {
                 self.coinDetails = detailData
                 self.coinDetailSubscription?.cancel()
             }
-        
     }
-    
 }
