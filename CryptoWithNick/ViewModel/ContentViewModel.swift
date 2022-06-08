@@ -45,6 +45,7 @@ class ContentViewModel: ObservableObject {
             .combineLatest(dataService.$coins, $sortOption)
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
             .map(filterAndSortCoins)
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] returnedCoins in
                 self?.coins = returnedCoins
             }.store(in: &cancellable)
@@ -63,6 +64,7 @@ class ContentViewModel: ObservableObject {
         marketDataService.$marketData
             .combineLatest($portfolioCoins)
             .map(mappingMarketData)
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] stats in
                 guard let self = self else { return }
                 self.statistics = stats

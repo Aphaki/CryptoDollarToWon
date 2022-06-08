@@ -29,12 +29,14 @@ class CoinDetailVM: ObservableObject {
         detailDataService.$coinDetails
             .combineLatest($coin)
             .map(mapDataToStatistics)
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] (overview, additional) in
                 self?.overviewStatistic = overview
                 self?.additionalStatistic = additional
             }
             .store(in: &subscription)
         detailDataService.$coinDetails
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] returnedDetails in
                 self?.coinDescriptions = returnedDetails?.description?.en?.removingHTMLOccurances
             }
