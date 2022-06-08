@@ -10,10 +10,10 @@ import SwiftUI
 
 class LocalFileManager {
     
-   static let shared = LocalFileManager()
+    static let shared = LocalFileManager()
     
     init () { }
-     
+    
     func getImgFromFile(imgName: String, folderName: String) -> UIImage? {
         guard
             let imgURL = getImageURL(folderName: folderName, imageName: imgName),
@@ -22,7 +22,7 @@ class LocalFileManager {
         return UIImage(contentsOfFile: imgURL.path)
     }
     
-     func saveImage(image: UIImage, folderName: String, imgName: String) {
+    func saveImage(image: UIImage, folderName: String, imgName: String) {
         
         createFolderIfNeed(folderName: folderName)
         
@@ -37,7 +37,7 @@ class LocalFileManager {
         }
     }
     
-   private func createFolderIfNeed(folderName: String) {
+    private func createFolderIfNeed(folderName: String) {
         guard let folderURL = getFolderURL(folderName: folderName) else { return }
         
         if !FileManager.default.fileExists(atPath: folderURL.path) {
@@ -49,12 +49,12 @@ class LocalFileManager {
         }
     }
     
-   private func getFolderURL(folderName: String) -> URL? {
+    private func getFolderURL(folderName: String) -> URL? {
         guard let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return nil }
         return url.appendingPathComponent(folderName)
     }
     
-   private func getImageURL(folderName: String, imageName: String) -> URL? {
+    private func getImageURL(folderName: String, imageName: String) -> URL? {
         guard let folderURL = getFolderURL(folderName: folderName) else {return nil}
         
         return folderURL.appendingPathComponent(imageName + ".png")

@@ -163,6 +163,11 @@ extension ContentView {
                 CoinRowView(coin: coin, isFortfolio: true)
                     .padding(.vertical, 10)
                     .listRowBackground(Color.theme.background)
+                    .onTapGesture {
+                        selectedCoin = coin
+                        showDetailView.toggle()
+                    }
+
             }
             
         }.listStyle(PlainListStyle())

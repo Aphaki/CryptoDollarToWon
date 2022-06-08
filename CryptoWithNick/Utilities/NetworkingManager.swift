@@ -17,13 +17,13 @@ class NetworkingManager {
         var errorDescription: String? {
             switch self {
             case .badURLResponse(let url):
-               return "BadURLResponse from url: \(url)"
+                return "BadURLResponse from url: \(url)"
             case .unknown:
-               return "[⚠️]There is unknown error"
+                return "[⚠️]There is unknown error"
             }
         }
     }
-   
+    
     static func download(url: URL) -> AnyPublisher<Data,Error> {
         return URLSession.shared.dataTaskPublisher(for: url)
             .tryMap { try responseHandler(output: $0, url: url)}
@@ -39,12 +39,12 @@ class NetworkingManager {
         }
         return output.data
     }
-  static func completionHandler(completion: (Subscribers.Completion<Error>)) {
-       switch completion {
-       case .finished
-           : break
-       case .failure(let error)
-           : print("error: \(error.localizedDescription)")
-       }
+    static func completionHandler(completion: (Subscribers.Completion<Error>)) {
+        switch completion {
+        case .finished
+            : break
+        case .failure(let error)
+            : print("error: \(error.localizedDescription)")
+        }
     }
 }

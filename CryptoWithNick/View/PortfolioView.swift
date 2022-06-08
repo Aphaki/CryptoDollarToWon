@@ -112,6 +112,7 @@ extension PortfolioView {
                 Text("Current Value:")
                 Spacer()
                 Text(getCurrentValue().asCurrencyWith2Demicals())
+                    .animation(.none)
             }
         }
         .padding(.horizontal, 10)
