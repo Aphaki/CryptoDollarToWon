@@ -20,8 +20,16 @@ extension Date {
         formatter.dateStyle = .short
         return formatter
     }
-    
     func asShortDateString() -> String {
         return shortFormatter.string(from: self)
+    }
+    
+    private var customDateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYYMMdd"
+        return formatter
+    }
+    func asCustomString() -> String {
+        return customDateFormatter.string(from: self)
     }
 }

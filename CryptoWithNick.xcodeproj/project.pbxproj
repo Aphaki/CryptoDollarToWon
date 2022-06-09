@@ -36,6 +36,8 @@
 		7F93E40C2836419900B90B34 /* CircleButtonAnymationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F93E40B2836419900B90B34 /* CircleButtonAnymationView.swift */; };
 		7F9A50B32844B69600CA70CC /* PortfolioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F9A50B22844B69600CA70CC /* PortfolioView.swift */; };
 		7F9A50B52844BC3600CA70CC /* CoinLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F9A50B42844BC3600CA70CC /* CoinLogoView.swift */; };
+		7FA12CDE2852334500B18B03 /* ExchangeRateDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA12CDD2852334500B18B03 /* ExchangeRateDataService.swift */; };
+		7FA12CE02852337A00B18B03 /* ExchangeRateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA12CDF2852337A00B18B03 /* ExchangeRateModel.swift */; };
 		7FA832AA2845981B0077B610 /* PortfolioContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7FA832A82845981B0077B610 /* PortfolioContainer.xcdatamodeld */; };
 		7FA832AC284598A90077B610 /* PortfolioDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA832AB284598A90077B610 /* PortfolioDataService.swift */; };
 		7FAC2267284F556F00689301 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAC2266284F556F00689301 /* String.swift */; };
@@ -78,6 +80,8 @@
 		7F93E40B2836419900B90B34 /* CircleButtonAnymationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleButtonAnymationView.swift; sourceTree = "<group>"; };
 		7F9A50B22844B69600CA70CC /* PortfolioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioView.swift; sourceTree = "<group>"; };
 		7F9A50B42844BC3600CA70CC /* CoinLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinLogoView.swift; sourceTree = "<group>"; };
+		7FA12CDD2852334500B18B03 /* ExchangeRateDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRateDataService.swift; sourceTree = "<group>"; };
+		7FA12CDF2852337A00B18B03 /* ExchangeRateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRateModel.swift; sourceTree = "<group>"; };
 		7FA832A92845981B0077B610 /* PortfolioContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PortfolioContainer.xcdatamodel; sourceTree = "<group>"; };
 		7FA832AB284598A90077B610 /* PortfolioDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioDataService.swift; sourceTree = "<group>"; };
 		7FAC2266284F556F00689301 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -136,6 +140,7 @@
 				7F82976F284386DE00A48C9D /* GlobalCryptoData.swift */,
 				7FA832A82845981B0077B610 /* PortfolioContainer.xcdatamodeld */,
 				7F60DA762849DB6100AE75EE /* CoinDetailModel.swift */,
+				7FA12CDF2852337A00B18B03 /* ExchangeRateModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -148,6 +153,7 @@
 				7F8297712843924300A48C9D /* MarketDataService.swift */,
 				7FA832AB284598A90077B610 /* PortfolioDataService.swift */,
 				7F60DA782849DD9200AE75EE /* CoinDetailDataService.swift */,
+				7FA12CDD2852334500B18B03 /* ExchangeRateDataService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -296,6 +302,7 @@
 				7F8D36F2283CB999009AB2FA /* CoinImageView.swift in Sources */,
 				7F486AD02836205D008ED742 /* ContentView.swift in Sources */,
 				7F829770284386DE00A48C9D /* GlobalCryptoData.swift in Sources */,
+				7FA12CE02852337A00B18B03 /* ExchangeRateModel.swift in Sources */,
 				7F9A50B32844B69600CA70CC /* PortfolioView.swift in Sources */,
 				7F60DA792849DD9200AE75EE /* CoinDetailDataService.swift in Sources */,
 				7F60DA7B2849E13200AE75EE /* CoinDetailVM.swift in Sources */,
@@ -312,6 +319,7 @@
 				7FD585A1284F448000CD44B9 /* Date.swift in Sources */,
 				7F8D36F4283CC0D7009AB2FA /* CoinImageVM.swift in Sources */,
 				7F93E408283632A000B90B34 /* ButtonView.swift in Sources */,
+				7FA12CDE2852334500B18B03 /* ExchangeRateDataService.swift in Sources */,
 				7F335C29283772AB0052C3CE /* CoinModel.swift in Sources */,
 				7F335C3428378DE10052C3CE /* NetworkingManager.swift in Sources */,
 				7F486ADD2836237D008ED742 /* Color.swift in Sources */,

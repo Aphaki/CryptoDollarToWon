@@ -146,7 +146,7 @@ extension ContentView {
     }
     var allCoinLists: some View {
         List {
-            ForEach(vm.coins) { coin in
+            ForEach(vm.krwCoins) { coin in
                 CoinRowView(coin: coin, isFortfolio: false)
                     .padding(.vertical, 10)
                     .listRowBackground(Color.theme.background)
