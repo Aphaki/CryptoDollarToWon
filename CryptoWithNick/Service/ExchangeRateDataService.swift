@@ -10,10 +10,7 @@ import Combine
 
 class ExchangeRateDataService {
     
-    @Published var usdExchangeRate: Double? = 1250.7
-    @Published var exchangeRateModel: ExchangeRateModel? = nil
-    
-    var isEmpty: Bool = false
+    @Published var usdModel: ExchangeRateModel? = nil
     
     var usdSubscription: AnyCancellable?
     
@@ -24,28 +21,26 @@ class ExchangeRateDataService {
     }
     
     private func fetchUSD() {
-        print("First currentDate : \(currentDate.asCustomString())")
+        print(currentDate.asCustomString())
         guard let url = URL(string: "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=HCBiZ4wSwjer7d3VzKzaZQgHTkeCTFs5&searchdate=\(currentDate.asCustomString())&data=AP01") else { return }
-       usdSubscription = NetworkingManager.download(url: url)
+      usdSubscription = NetworkingManager.download(url: url)
             .decode(type: [ExchangeRateModel].self, decoder: JSONDecoder())
-            .map {[weak self] exchanges -> ExchangeRateModel? in
-                guard let self = self else { return nil}
+            .map { exchanges -> ExchangeRateModel? in
                 if exchanges.isEmpty {
-                    self.isEmpty = true
-                    self.currentDate = self.currentDate.addingTimeInterval(-24*60*60)
+                    let yesterday = self.currentDate.addingTimeInterval(-24*60*60)
+                    self.currentDate = yesterday
                     self.fetchUSD()
-                } else {
-                    self.exchangeRateModel = exchanges.first { $0.curUnit == "USD" }
-                    print("USDRateModel: \(String(describing: self.exchangeRateModel))")
-                    
+                    return nil
                 }
-                return self.exchangeRateModel
+                print("NOW: " + self.currentDate.asCustomString())
+                let usdExchangeRate = exchanges.first { $0.curUnit == "USD" }
+                return usdExchangeRate
             }
             .sink { completion in
                 NetworkingManager.completionHandler(completion: completion)
             } receiveValue: { [weak self] returnedModel in
-                self?.usdExchangeRate = Double(returnedModel?.dealBasR ?? "1250.7")
-                print("USDExchangeRate : \(String(describing: self?.usdExchangeRate))")
+                print("receivedValue : \(String(describing: returnedModel))")
+                self?.usdModel = returnedModel
                 self?.usdSubscription?.cancel()
             }
     }

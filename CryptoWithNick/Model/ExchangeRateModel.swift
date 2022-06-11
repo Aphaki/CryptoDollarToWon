@@ -9,9 +9,9 @@ import Foundation
 
 // MARK: - ExchangeRateModel
 struct ExchangeRateModel: Codable {
-    let result: Int?
-    let curUnit,tts: String?
-    let dealBasR: String?
+    let result: Int
+    let curUnit,tts: String
+    let dealBasR: String
     
     enum CodingKeys: String, CodingKey {
         case result

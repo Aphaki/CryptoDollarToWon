@@ -12,10 +12,25 @@ extension Double {
         let formatter = NumberFormatter()
         formatter.usesGroupingSeparator = true
         formatter.numberStyle = .currency
+        formatter.locale = Locale(identifier: "en_US")
         formatter.minimumFractionDigits = 2
         formatter.maximumFractionDigits = 2
         return formatter
     }
+    private var wonFormatter: NumberFormatter {
+        let numFormatter = NumberFormatter()
+        numFormatter.usesGroupingSeparator = true
+        numFormatter.numberStyle = .currency
+        numFormatter.locale = Locale(identifier: "ko_KR")
+        numFormatter.maximumFractionDigits = 0
+        return numFormatter
+    }
+    
+    func asWonCurrency() -> String {
+        let number = NSNumber(value: self)
+        return wonFormatter.string(from: number) ?? "₩0"
+    }
+    
     func asCurrencyWith2Demicals() -> String {
         let number = NSNumber(value: self)
         return currencyFormatter2.string(from: number) ?? "$0.00"

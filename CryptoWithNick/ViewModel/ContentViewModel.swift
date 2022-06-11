@@ -18,6 +18,7 @@ class ContentViewModel: ObservableObject {
     @Published var statistics: [StatisticModel] = []
     @Published var sortOption: SortOption = .holdings
     @Published var isLoading: Bool = false
+    @Published var isDollar: Bool = true
     
     
     private let exchangeRateService = ExchangeRateDataService()
@@ -78,11 +79,14 @@ class ContentViewModel: ObservableObject {
         
         // 한화로 변경
         $coins
-            .combineLatest(exchangeRateService.$usdExchangeRate, $portfolioCoins)
-            .map { (allCoins, rate, portCoins) -> (krCoins: [CoinModel], krPortCoins: [CoinModel]) in
-                guard let rate = rate else {
-                    print("rate is nil")
-                    return (allCoins, portCoins) }
+            .combineLatest(exchangeRateService.$usdModel, $portfolioCoins)
+            .map { (allCoins, usdModel, portCoins) -> (krCoins: [CoinModel], krPortCoins: [CoinModel]) in
+                guard
+                    let unwrapedUSDModel = usdModel,
+                    let rate = Double(unwrapedUSDModel.dealBasR.removeingComma)
+                else {
+                   print("rate is nil")
+                   return (allCoins,portCoins) }
                 let krCoins = allCoins.map { coin -> CoinModel in
                     let krCurrentPrice = coin.currentPrice * rate
                     let krMarketCap = (coin.marketCap ?? 0) * rate
@@ -92,7 +96,7 @@ class ContentViewModel: ObservableObject {
                     let krPriceChange24 = (coin.priceChange24H ?? 0) * rate
                     let krMarketCapChange24H = (coin.marketCapChange24H ?? 0) * rate
                     return CoinModel(id: coin.id,
-                                     symbol: coin.name,
+                                     symbol: coin.symbol,
                                      name: coin.name,
                                      image: coin.image,
                                      currentPrice: krCurrentPrice ,
@@ -129,7 +133,7 @@ class ContentViewModel: ObservableObject {
                     let krPriceChange24 = (coin.priceChange24H ?? 0) * rate
                     let krMarketCapChange24H = (coin.marketCapChange24H ?? 0) * rate
                     return CoinModel(id: coin.id,
-                                     symbol: coin.name,
+                                     symbol: coin.symbol,
                                      name: coin.name,
                                      image: coin.image,
                                      currentPrice: krCurrentPrice ,

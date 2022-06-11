@@ -75,11 +75,11 @@ class CoinDetailVM: ObservableObject {
         
         let priceChange24hValue = coin.priceChange24H?.asCurrencyWith2Demicals() ?? "n/a"
         let priceChange24hPer = coin.priceChangePercentage24HInCurrency ?? 0
-        let priceChange24hStat = StatisticModel(title: "24h 변동성", value: priceChange24hValue, percentageChange: priceChange24hPer)
+        let priceChange24hStat = StatisticModel(title: "24h 변동성", value:  priceChange24hValue, percentageChange: priceChange24hPer)
         
         let marketCap24hChangeValue = coin.marketCap?.formattedWithAbbreviations() ?? "n/a"
         let marketCap24hChangePer = coin.marketCapChangePercentage24H ?? 0
-        let marketCapChangeStat = StatisticModel(title: "24h 시총 변동성", value: marketCap24hChangeValue, percentageChange: marketCap24hChangePer)
+        let marketCapChangeStat = StatisticModel(title: "24h 시총 변동성", value: "$" + marketCap24hChangeValue, percentageChange: marketCap24hChangePer)
         
         let blockTimeValue = detailData?.blockTimeInMinutes ?? 0
         let blockTimeStat = StatisticModel(title: "블록타임", value: "\(blockTimeValue)")

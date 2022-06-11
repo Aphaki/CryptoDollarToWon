@@ -16,6 +16,7 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
+            // 배경화면 + sheet(포트폴리오 EditView) + 네비게이션 링크(DetailView) 설정
             Color.theme.background
                 .ignoresSafeArea()
                 .sheet(isPresented: $showFortfolioView) {
@@ -27,6 +28,10 @@ struct ContentView: View {
                                    destination: { DetailLoadingView(coin: $selectedCoin) },
                                    label: {EmptyView()})
                 )
+            // 헤더(버튼 + 타이틀 + 버튼)
+            // 스탯뷰(시총 + 거래량 + 비트코인비율 + 포트폴리오 하루 변동성)
+            // 서치바
+            // 칼럼 타이틀( coin , holdings, price, reload버튼 )
             VStack {
                 headerView
                     .padding(.horizontal, 10)
@@ -64,6 +69,14 @@ extension ContentView {
                 .background(
                 CircleButtonAnymationView(animate: $showFortfolio)
                 )
+            ButtonView(iconName: vm.isDollar ? "wonsign.circle.fill" : "dollarsign.circle.fill")
+                .onTapGesture {
+                    if vm.isDollar {
+                        vm.isDollar = false
+                    } else {
+                        vm.isDollar = true
+                    }
+                }
             Spacer()
             Text(!showFortfolio ? "Live Prices" : "Fortfolio")
                 .font(.headline)
@@ -146,7 +159,7 @@ extension ContentView {
     }
     var allCoinLists: some View {
         List {
-            ForEach(vm.krwCoins) { coin in
+            ForEach(vm.isDollar ? vm.coins : vm.krwCoins) { coin in
                 CoinRowView(coin: coin, isFortfolio: false)
                     .padding(.vertical, 10)
                     .listRowBackground(Color.theme.background)
@@ -159,7 +172,7 @@ extension ContentView {
     }
     var fortfolioLists: some View {
         List {
-            ForEach(vm.portfolioCoins) { coin in
+            ForEach(vm.isDollar ? vm.portfolioCoins : vm.krwPortfolioCoins) { coin in
                 CoinRowView(coin: coin, isFortfolio: true)
                     .padding(.vertical, 10)
                     .listRowBackground(Color.theme.background)

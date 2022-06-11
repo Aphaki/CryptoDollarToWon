@@ -10,8 +10,8 @@ import SwiftUI
 struct CoinRowView: View {
     
     let coin: CoinModel
-    
     let isFortfolio: Bool
+    @EnvironmentObject var vm: ContentViewModel
     
     var body: some View {
         HStack(spacing: 0){
@@ -32,9 +32,17 @@ struct CoinRowView: View {
 
 struct CoinRowView_Previews: PreviewProvider {    
     static var previews: some View {
-        CoinRowView(coin: dev.coin, isFortfolio: true)
-            .padding()
+        Group {
+            CoinRowView(coin: dev.coin, isFortfolio: true)
+                .padding()
             .previewLayout(.sizeThatFits)
+            .environmentObject(ContentViewModel())
+            CoinRowView(coin: dev.krwCoin, isFortfolio: true)
+                .padding()
+            .previewLayout(.sizeThatFits)
+            .preferredColorScheme(.dark)
+            .environmentObject(ContentViewModel())
+        }
     }
 }
 
@@ -55,10 +63,19 @@ extension CoinRowView {
     }
 }
 extension CoinRowView {
+    // 센터 칼럼 : 갯수 * 현재가격 , 갯수
     var centerColumn: some View {
         VStack(alignment: .trailing) {
-            Text( ((coin.currentHoldings ?? 0) * (coin.currentPrice) ).asCurrencyWith2Demicals() ) // 갯수 * 가격
-            Text(coin.currentHoldings?.asNumberString() ?? "0") // 갯수
+            if coin.currentHoldings != nil {
+                Text( vm.isDollar ? ((coin.currentHoldings!) * (coin.currentPrice)).asCurrencyWith2Demicals()
+                      : ((coin.currentHoldings!) * (coin.currentPrice)).asWonCurrency()
+                )
+
+                Text(coin.currentHoldings!.asNumberString())
+            } else {
+                Text("")
+            }
+
         }.font(.caption)
             .frame(width: UIScreen.main.bounds.width / 4, alignment: .trailing)
     }
@@ -68,7 +85,9 @@ extension CoinRowView {
         VStack(alignment: .trailing) {
             HStack {
                 Spacer()
-                Text( ((coin.currentPrice) ).asCurrencyWith2Demicals() )
+                Text(vm.isDollar ? coin.currentPrice.asCurrencyWith2Demicals()
+                     : coin.currentPrice.asWonCurrency()
+                )
             } // 현재 가격
             Text( (coin.priceChangePercentage24H ?? 0).asPercentString() )
                 .foregroundColor( coin.priceChangePercentage24H ?? 0 >= 0 ? Color.green : Color.red )
