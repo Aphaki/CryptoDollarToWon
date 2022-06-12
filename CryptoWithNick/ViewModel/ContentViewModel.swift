@@ -9,16 +9,18 @@ import Foundation
 import Combine
 
 class ContentViewModel: ObservableObject {
-    
+    // 달러로 받을때
     @Published var coins: [CoinModel] = []
     @Published var portfolioCoins: [CoinModel] = []
-    @Published var krwCoins: [CoinModel] = []
-    @Published var krwPortfolioCoins: [CoinModel] = []
-    @Published var searchBarText: String = ""
     @Published var statistics: [StatisticModel] = []
+    // 공통 변수
+    @Published var searchBarText: String = ""
     @Published var sortOption: SortOption = .holdings
     @Published var isLoading: Bool = false
-    
+    // 원화로 받을때
+    @Published var krwCoins: [CoinModel] = []
+    @Published var krwPortfolioCoins: [CoinModel] = []
+    @Published var krwStatistics: [StatisticModel] = []
     
     private let exchangeRateService = ExchangeRateDataService()
     private let dataService = DataService()
@@ -72,107 +74,161 @@ class ContentViewModel: ObservableObject {
             .sink { [weak self] stats in
                 guard let self = self else { return }
                 self.statistics = stats
-                self.isLoading = false
             }
             .store(in: &cancellable)
         
         // 한화로 변경
         $coins
             .combineLatest(exchangeRateService.$usdModel, $portfolioCoins)
-            .map { (allCoins, usdModel, portCoins) -> (krCoins: [CoinModel], krPortCoins: [CoinModel]) in
-                guard
-                    let unwrapedUSDModel = usdModel,
-                    let rate = Double(unwrapedUSDModel.dealBasR.removeingComma)
-                else {
-                   print("rate is nil")
-                   return (allCoins,portCoins) }
-                let krCoins = allCoins.map { coin -> CoinModel in
-                    let krCurrentPrice = coin.currentPrice * rate
-                    let krMarketCap = (coin.marketCap ?? 0) * rate
-                    let krTotalVolume = (coin.totalVolume ?? 0) * rate
-                    let krHigh24 = (coin.high24H ?? 0) * rate
-                    let krLow24 = (coin.low24H ?? 0) * rate
-                    let krPriceChange24 = (coin.priceChange24H ?? 0) * rate
-                    let krMarketCapChange24H = (coin.marketCapChange24H ?? 0) * rate
-                    return CoinModel(id: coin.id,
-                                     symbol: coin.symbol,
-                                     name: coin.name,
-                                     image: coin.image,
-                                     currentPrice: krCurrentPrice ,
-                                     marketCap: krMarketCap,
-                                     marketCapRank: coin.marketCapRank,
-                                     fullyDilutedValuation: coin.fullyDilutedValuation,
-                                     totalVolume: krTotalVolume,
-                                     high24H: krHigh24,
-                                     low24H: krLow24,
-                                     priceChange24H: krPriceChange24,
-                                     priceChangePercentage24H: coin.priceChangePercentage24H,
-                                     marketCapChange24H: krMarketCapChange24H,
-                                     marketCapChangePercentage24H: coin.marketCapChangePercentage24H,
-                                     circulatingSupply: coin.circulatingSupply,
-                                     totalSupply: coin.totalSupply,
-                                     maxSupply: coin.maxSupply,
-                                     ath: coin.ath,
-                                     athChangePercentage: coin.athChangePercentage,
-                                     athDate: coin.athDate,
-                                     atl: coin.atl,
-                                     atlChangePercentage: coin.atlChangePercentage,
-                                     atlDate: coin.atlDate,
-                                     lastUpdated: coin.lastUpdated,
-                                     sparklineIn7D: coin.sparklineIn7D,
-                                     priceChangePercentage24HInCurrency: coin.priceChangePercentage24HInCurrency,
-                                     currentHoldings: coin.currentHoldings)
-                }
-                let krPortCoins = portCoins.map { coin -> CoinModel in
-                    let krCurrentPrice = coin.currentPrice * rate
-                    let krMarketCap = (coin.marketCap ?? 0) * rate
-                    let krTotalVolume = (coin.totalVolume ?? 0) * rate
-                    let krHigh24 = (coin.high24H ?? 0) * rate
-                    let krLow24 = (coin.low24H ?? 0) * rate
-                    let krPriceChange24 = (coin.priceChange24H ?? 0) * rate
-                    let krMarketCapChange24H = (coin.marketCapChange24H ?? 0) * rate
-                    return CoinModel(id: coin.id,
-                                     symbol: coin.symbol,
-                                     name: coin.name,
-                                     image: coin.image,
-                                     currentPrice: krCurrentPrice ,
-                                     marketCap: krMarketCap,
-                                     marketCapRank: coin.marketCapRank,
-                                     fullyDilutedValuation: coin.fullyDilutedValuation,
-                                     totalVolume: krTotalVolume,
-                                     high24H: krHigh24,
-                                     low24H: krLow24,
-                                     priceChange24H: krPriceChange24,
-                                     priceChangePercentage24H: coin.priceChangePercentage24H,
-                                     marketCapChange24H: krMarketCapChange24H,
-                                     marketCapChangePercentage24H: coin.marketCapChangePercentage24H,
-                                     circulatingSupply: coin.circulatingSupply,
-                                     totalSupply: coin.totalSupply,
-                                     maxSupply: coin.maxSupply,
-                                     ath: coin.ath,
-                                     athChangePercentage: coin.athChangePercentage,
-                                     athDate: coin.athDate,
-                                     atl: coin.atl,
-                                     atlChangePercentage: coin.atlChangePercentage,
-                                     atlDate: coin.atlDate,
-                                     lastUpdated: coin.lastUpdated,
-                                     sparklineIn7D: coin.sparklineIn7D,
-                                     priceChangePercentage24HInCurrency: coin.priceChangePercentage24HInCurrency,
-                                     currentHoldings: coin.currentHoldings)
-                }
-                return (krCoins, krPortCoins)
-            }
+            .map(mappingDollarToWon)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] returnedCoins, returnedPortCoins in
                 self?.krwCoins = returnedCoins
                 self?.krwPortfolioCoins = returnedPortCoins
             }
             .store(in: &cancellable)
-                    
+        marketDataService.$marketData
+            .combineLatest($krwPortfolioCoins, exchangeRateService.$usdModel)
+            .map { (marketData, krwPortCoins, usdModel) -> [StatisticModel] in
+                var stats: [StatisticModel] = []
+                guard
+                    let data = marketData,
+                    let unwrapedUSDModel = usdModel,
+                    let rate = Double(unwrapedUSDModel.dealBasR.removeingComma)
+                else {
+                   return stats
+                }
+                
+                let marketCapValue = (data.rawMarketCap * rate)
+                let marketCapModel = StatisticModel(title: "시가총액", value: "₩" + marketCapValue.formattedWithAbbreviations(), percentageChange: data.marketCapChangePercentage24HUsd)
+                
+                let volumeModel = StatisticModel(title: "24H 거래량", value: data.volume)
+                
+                let btcDominanceModel = StatisticModel(title: "BTC 비율", value: data.btcDominance)
+                
+                let portfolioValue = krwPortCoins.map { coin in
+                    return coin.currentHoldingsValue
+                }.reduce(0, +)
+                let previousValue = krwPortCoins.map { (coin) -> Double in
+                    let currentValue = coin.currentHoldingsValue
+                    let percentChange = coin.priceChangePercentage24H ?? 0 / 100
+                    let previousValue = currentValue / (1 + percentChange)
+                    return previousValue
+                }.reduce(0, +)
+                let percentageChange = ((portfolioValue - previousValue) / previousValue)
+                let krwPortModel = StatisticModel(title: "포트폴리오", value: portfolioValue.asWonCurrency(), percentageChange: percentageChange)
+                
+                stats.append(contentsOf: [
+                  marketCapModel,
+                  volumeModel,
+                  btcDominanceModel,
+                  krwPortModel
+                ])
+                return stats
+            }
+            .receive(on: DispatchQueue.main)
+            .sink {[weak self] krwStats in
+                self?.krwStatistics = krwStats
+                self?.isLoading = false
+            }.store(in: &cancellable)
     }
     
     func updatePortfolio(coin: CoinModel, amount: Double) {
         portfolioDataService.updatePortfolio(coin: coin, amount: amount)
+    }
+    
+    private func mappingDollarToWon(allCoins: [CoinModel], usdModel: ExchangeRateModel?, portCoins: [CoinModel]) -> (krCoins: [CoinModel], krPortCoins: [CoinModel]) {
+        guard
+            let unwrapedUSDModel = usdModel,
+            let rate = Double(unwrapedUSDModel.dealBasR.removeingComma)
+        else {
+           print("rate is nil")
+           return (allCoins, portCoins) }
+        let krCoins = allCoins.map { coin -> CoinModel in
+            let krCurrentPrice = coin.currentPrice * rate
+            let krMarketCap = (coin.marketCap ?? 0) * rate
+            let krTotalVolume = (coin.totalVolume ?? 0) * rate
+            let krHigh24 = (coin.high24H ?? 0) * rate
+            let krLow24 = (coin.low24H ?? 0) * rate
+            let krPriceChange24 = (coin.priceChange24H ?? 0) * rate
+            let krMarketCapChange24H = (coin.marketCapChange24H ?? 0) * rate
+            let krSparklineArray = coin.sparklineIn7D?.price?.map
+            { aPrice -> Double in
+              return aPrice * rate
+            }
+            let krSparklineIn7d = SparklineIn7D(price: krSparklineArray)
+            return CoinModel(id: coin.id,
+                             symbol: coin.symbol,
+                             name: coin.name,
+                             image: coin.image,
+                             currentPrice: krCurrentPrice ,
+                             marketCap: krMarketCap,
+                             marketCapRank: coin.marketCapRank,
+                             fullyDilutedValuation: coin.fullyDilutedValuation,
+                             totalVolume: krTotalVolume,
+                             high24H: krHigh24,
+                             low24H: krLow24,
+                             priceChange24H: krPriceChange24,
+                             priceChangePercentage24H: coin.priceChangePercentage24H,
+                             marketCapChange24H: krMarketCapChange24H,
+                             marketCapChangePercentage24H: coin.marketCapChangePercentage24H,
+                             circulatingSupply: coin.circulatingSupply,
+                             totalSupply: coin.totalSupply,
+                             maxSupply: coin.maxSupply,
+                             ath: coin.ath,
+                             athChangePercentage: coin.athChangePercentage,
+                             athDate: coin.athDate,
+                             atl: coin.atl,
+                             atlChangePercentage: coin.atlChangePercentage,
+                             atlDate: coin.atlDate,
+                             lastUpdated: coin.lastUpdated,
+                             sparklineIn7D: krSparklineIn7d,
+                             priceChangePercentage24HInCurrency: coin.priceChangePercentage24HInCurrency,
+                             currentHoldings: coin.currentHoldings)
+        }
+        let krPortCoins = portCoins.map { coin -> CoinModel in
+            let krCurrentPrice = coin.currentPrice * rate
+            let krMarketCap = (coin.marketCap ?? 0) * rate
+            let krTotalVolume = (coin.totalVolume ?? 0) * rate
+            let krHigh24 = (coin.high24H ?? 0) * rate
+            let krLow24 = (coin.low24H ?? 0) * rate
+            let krPriceChange24 = (coin.priceChange24H ?? 0) * rate
+            let krMarketCapChange24H = (coin.marketCapChange24H ?? 0) * rate
+            let krSparklineArray = coin.sparklineIn7D?.price?.map
+            { aPrice -> Double in
+              return aPrice * rate
+            }
+            let krSparklineIn7d = SparklineIn7D(price: krSparklineArray)
+            return CoinModel(id: coin.id,
+                             symbol: coin.symbol,
+                             name: coin.name,
+                             image: coin.image,
+                             currentPrice: krCurrentPrice ,
+                             marketCap: krMarketCap,
+                             marketCapRank: coin.marketCapRank,
+                             fullyDilutedValuation: coin.fullyDilutedValuation,
+                             totalVolume: krTotalVolume,
+                             high24H: krHigh24,
+                             low24H: krLow24,
+                             priceChange24H: krPriceChange24,
+                             priceChangePercentage24H: coin.priceChangePercentage24H,
+                             marketCapChange24H: krMarketCapChange24H,
+                             marketCapChangePercentage24H: coin.marketCapChangePercentage24H,
+                             circulatingSupply: coin.circulatingSupply,
+                             totalSupply: coin.totalSupply,
+                             maxSupply: coin.maxSupply,
+                             ath: coin.ath,
+                             athChangePercentage: coin.athChangePercentage,
+                             athDate: coin.athDate,
+                             atl: coin.atl,
+                             atlChangePercentage: coin.atlChangePercentage,
+                             atlDate: coin.atlDate,
+                             lastUpdated: coin.lastUpdated,
+                             sparklineIn7D: krSparklineIn7d,
+                             priceChangePercentage24HInCurrency: coin.priceChangePercentage24HInCurrency,
+                             currentHoldings: coin.currentHoldings)
+        }
+        return (krCoins, krPortCoins)
     }
     
     private func filteringPortfolioCoins(coinModels: [CoinModel], portfolioEntitys: [PortfolioEntity]) -> [CoinModel] {
@@ -192,7 +248,7 @@ class ContentViewModel: ObservableObject {
         }
         
         let marketCap = StatisticModel(title: "Market Cap",
-                                       value: data.marketCap,
+                                       value: "$" + data.marketCap,
                                        percentageChange: data.marketCapChangePercentage24HUsd)
         let volume = StatisticModel(title: "24h Volume", value: data.volume)
         let btcDominance = StatisticModel(title: "BTC Dominance", value: data.btcDominance)
@@ -219,8 +275,8 @@ class ContentViewModel: ObservableObject {
             portfolio
         ])
         return stats
-        
     }
+    
     
     private func coinFiltering(text: String, startingCoins: [CoinModel]) -> [CoinModel] {
         guard !text.isEmpty else {

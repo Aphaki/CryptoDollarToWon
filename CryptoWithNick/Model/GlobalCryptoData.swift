@@ -185,6 +185,15 @@ struct DataClass: Codable {
         }
         return ""
     }
+    var rawMarketCap: Double {
+        if let item = totalMarketCap.first(where: { (key, value) in
+           return key == "usd" })
+        {
+            return item.value
+        }
+        return 0
+
+    }
     var volume: String {
         if let item = totalVolume.first(where: { (key, value) in
             return key == "usd"

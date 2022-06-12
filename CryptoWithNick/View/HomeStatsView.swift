@@ -12,10 +12,11 @@ struct HomeStatsView: View {
     @EnvironmentObject private var vm: ContentViewModel
     
     @Binding var showPortfolio: Bool
+    @Binding var isDollar: Bool
     
     var body: some View {
         HStack {
-            ForEach(vm.statistics) { stat in
+            ForEach(isDollar ? vm.statistics : vm.krwStatistics) { stat in
                 StatisticView(stat: stat)
                     .frame(width: UIScreen.main.bounds.width / 3)
             }
@@ -26,7 +27,7 @@ struct HomeStatsView: View {
 
 struct HomeStatsView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeStatsView(showPortfolio: .constant(false))
+        HomeStatsView(showPortfolio: .constant(false), isDollar: .constant(false))
             .environmentObject(dev.homeVM)
     }
 }

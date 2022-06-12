@@ -36,7 +36,7 @@ struct ContentView: View {
             VStack {
                 headerView
                     .padding(.horizontal, 10)
-                HomeStatsView(showPortfolio: $showFortfolio)
+                HomeStatsView(showPortfolio: $showFortfolio, isDollar: $isDollar)
                     .padding()
                 SearchBarView(searchBarText: $vm.searchBarText)
                     .padding(.horizontal, 20)
