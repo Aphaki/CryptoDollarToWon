@@ -10,10 +10,10 @@ import SwiftUI
 struct DetailLoadingView: View {
     
     @Binding var coin: CoinModel?
-    
+    @Binding var isDollar: Bool
     var body: some View {
         if let unwrapedCoin = coin {
-            DetailView(coin: unwrapedCoin)
+            DetailView(coin: unwrapedCoin, isDollar: isDollar)
         }
     }
 }
@@ -28,9 +28,10 @@ struct DetailView: View {
     ]
     @StateObject private var vm: CoinDetailVM
     @State private var shortDescription: Bool = true
-    
-    init(coin: CoinModel) {
+    private var isDollar: Bool
+    init(coin: CoinModel, isDollar: Bool) {
         _vm = StateObject(wrappedValue: CoinDetailVM(coin: coin))
+        self.isDollar = isDollar
     }
     
     var body: some View {
@@ -103,7 +104,7 @@ extension DetailView {
         }
     private var overviewGrid: some View {
         LazyVGrid(columns: gridColumns, alignment: .leading, spacing: 30, pinnedViews: []) {
-            ForEach(vm.overviewStatistic) { stat in
+            ForEach(isDollar ? vm.overviewStatistic : vm.korOverviewStatistic) { stat in
                 StatisticView(stat: stat)
             }
         }
@@ -114,7 +115,7 @@ extension DetailView {
                   spacing: 30,
                   pinnedViews: [])
         {
-            ForEach(vm.additionalStatistic) { stat in
+            ForEach(isDollar ? vm.additionalStatistic : vm.korAdditionalStatistic) { stat in
                 StatisticView(stat: stat)
             }
         }
@@ -140,7 +141,7 @@ extension DetailView {
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            DetailView(coin: dev.coin)
-        }
+            DetailView(coin: dev.coin, isDollar: true)
+        }.environmentObject(ContentViewModel())
     }
 }

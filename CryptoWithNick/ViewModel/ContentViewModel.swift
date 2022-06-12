@@ -18,7 +18,6 @@ class ContentViewModel: ObservableObject {
     @Published var statistics: [StatisticModel] = []
     @Published var sortOption: SortOption = .holdings
     @Published var isLoading: Bool = false
-    @Published var isDollar: Bool = true
     
     
     private let exchangeRateService = ExchangeRateDataService()

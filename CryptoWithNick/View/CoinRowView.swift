@@ -11,6 +11,7 @@ struct CoinRowView: View {
     
     let coin: CoinModel
     let isFortfolio: Bool
+    @Binding var isDollar: Bool
     @EnvironmentObject var vm: ContentViewModel
     
     var body: some View {
@@ -33,11 +34,11 @@ struct CoinRowView: View {
 struct CoinRowView_Previews: PreviewProvider {    
     static var previews: some View {
         Group {
-            CoinRowView(coin: dev.coin, isFortfolio: true)
+            CoinRowView(coin: dev.coin, isFortfolio: true, isDollar: .constant(true))
                 .padding()
             .previewLayout(.sizeThatFits)
             .environmentObject(ContentViewModel())
-            CoinRowView(coin: dev.krwCoin, isFortfolio: true)
+            CoinRowView(coin: dev.krwCoin, isFortfolio: true, isDollar: .constant(true))
                 .padding()
             .previewLayout(.sizeThatFits)
             .preferredColorScheme(.dark)
@@ -67,7 +68,7 @@ extension CoinRowView {
     var centerColumn: some View {
         VStack(alignment: .trailing) {
             if coin.currentHoldings != nil {
-                Text( vm.isDollar ? ((coin.currentHoldings!) * (coin.currentPrice)).asCurrencyWith2Demicals()
+                Text( isDollar ? ((coin.currentHoldings!) * (coin.currentPrice)).asCurrencyWith2Demicals()
                       : ((coin.currentHoldings!) * (coin.currentPrice)).asWonCurrency()
                 )
 
@@ -85,7 +86,7 @@ extension CoinRowView {
         VStack(alignment: .trailing) {
             HStack {
                 Spacer()
-                Text(vm.isDollar ? coin.currentPrice.asCurrencyWith2Demicals()
+                Text(isDollar ? coin.currentPrice.asCurrencyWith2Demicals()
                      : coin.currentPrice.asWonCurrency()
                 )
             } // 현재 가격

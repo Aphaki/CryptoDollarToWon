@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var showDetailView: Bool = false
     @State private var selectedCoin: CoinModel? = nil
+    @State private var isDollar: Bool = true
     @State private var showFortfolio = false
     @State private var showFortfolioView = false
     @EnvironmentObject private var vm: ContentViewModel
@@ -25,7 +26,7 @@ struct ContentView: View {
                 }
                 .background(
                     NavigationLink(isActive: $showDetailView,
-                                   destination: { DetailLoadingView(coin: $selectedCoin) },
+                                   destination: { DetailLoadingView(coin: $selectedCoin, isDollar: $isDollar) },
                                    label: {EmptyView()})
                 )
             // 헤더(버튼 + 타이틀 + 버튼)
@@ -69,12 +70,12 @@ extension ContentView {
                 .background(
                 CircleButtonAnymationView(animate: $showFortfolio)
                 )
-            ButtonView(iconName: vm.isDollar ? "wonsign.circle.fill" : "dollarsign.circle.fill")
+            ButtonView(iconName: isDollar ? "wonsign.circle.fill" : "dollarsign.circle.fill")
                 .onTapGesture {
-                    if vm.isDollar {
-                        vm.isDollar = false
+                    if isDollar {
+                        isDollar = false
                     } else {
-                        vm.isDollar = true
+                        isDollar = true
                     }
                 }
             Spacer()
@@ -159,8 +160,8 @@ extension ContentView {
     }
     var allCoinLists: some View {
         List {
-            ForEach(vm.isDollar ? vm.coins : vm.krwCoins) { coin in
-                CoinRowView(coin: coin, isFortfolio: false)
+            ForEach(isDollar ? vm.coins : vm.krwCoins) { coin in
+                CoinRowView(coin: coin, isFortfolio: false, isDollar: $isDollar)
                     .padding(.vertical, 10)
                     .listRowBackground(Color.theme.background)
                     .onTapGesture {
@@ -172,8 +173,8 @@ extension ContentView {
     }
     var fortfolioLists: some View {
         List {
-            ForEach(vm.isDollar ? vm.portfolioCoins : vm.krwPortfolioCoins) { coin in
-                CoinRowView(coin: coin, isFortfolio: true)
+            ForEach(isDollar ? vm.portfolioCoins : vm.krwPortfolioCoins) { coin in
+                CoinRowView(coin: coin, isFortfolio: true, isDollar: $isDollar)
                     .padding(.vertical, 10)
                     .listRowBackground(Color.theme.background)
                     .onTapGesture {
