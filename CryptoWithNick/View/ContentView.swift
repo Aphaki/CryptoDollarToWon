@@ -13,6 +13,8 @@ struct ContentView: View {
     @State private var isDollar: Bool = true
     @State private var showFortfolio = false
     @State private var showFortfolioView = false
+    @State private var showInfoView = false
+    @State private var launchLoading = true
     @EnvironmentObject private var vm: ContentViewModel
     
     var body: some View {
@@ -24,6 +26,9 @@ struct ContentView: View {
                     PortfolioView()
                         .environmentObject(vm)
                 }
+                .sheet(isPresented: $showInfoView, content: {
+                    InfoView()
+                })
                 .background(
                     NavigationLink(isActive: $showDetailView,
                                    destination: { DetailLoadingView(coin: $selectedCoin, isDollar: $isDollar) },
@@ -53,6 +58,15 @@ struct ContentView: View {
                     }
                 }
             }
+            
+            if launchLoading {
+                LoadingView()
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                            self.launchLoading = false
+                        }
+                    }
+            }
         }
         
     }
@@ -65,6 +79,8 @@ extension ContentView {
                 .onTapGesture {
                     if showFortfolio {
                         showFortfolioView.toggle()
+                    } else {
+                        showInfoView.toggle()
                     }
                 }
                 .background(
