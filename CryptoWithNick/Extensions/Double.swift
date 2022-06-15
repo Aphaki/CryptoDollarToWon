@@ -56,6 +56,10 @@ extension Double {
         let sign = (self < 0) ? "-" : ""
 
         switch num {
+        case 1_000_000_000_000_000...:
+            let formatted = num / 1_000_000_000_000_000
+            let stringFormatted = formatted.asNumberString()
+            return "\(sign)\(stringFormatted)Qr"
         case 1_000_000_000_000...:
             let formatted = num / 1_000_000_000_000
             let stringFormatted = formatted.asNumberString()
