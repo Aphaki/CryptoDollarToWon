@@ -29,3 +29,12 @@
 
 
 ![포트폴리오기능](https://user-images.githubusercontent.com/90740892/175236157-071bfeb6-b772-49e7-8868-98ba1ec5bc71.gif)
+
+
+3) 상세정보 (애니메이션 그래프, 현재가, 시총, 거래량, 변동성 등등)
+
+
+
+![크립토상세보기](https://user-images.githubusercontent.com/90740892/175240553-4c394d92-c08d-4d24-b14f-f3b60ec7f8d1.gif)
+
+
