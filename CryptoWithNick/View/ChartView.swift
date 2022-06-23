@@ -75,7 +75,7 @@ extension ChartView {
                     }
                     path.addLine(to: CGPoint(x: xPosition, y: yPosition))
                 }
-            }// Path
+            } // Path
             .trim(from: 0, to: percentage)
             .stroke(lineColor, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
             .shadow(color: lineColor, radius: 10, x: 0, y: 10)

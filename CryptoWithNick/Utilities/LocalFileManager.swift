@@ -33,7 +33,7 @@ class LocalFileManager {
         do {
             try data.write(to: url)
         } catch let error {
-            print("ImgData Saving Error : \(error)")
+            print("이미지 저장중 에러: \(error)")
         }
     }
     
@@ -44,7 +44,7 @@ class LocalFileManager {
             do {
                 try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
             } catch let error {
-                print("CreateDirectory Error: \(error)")
+                print("디렉토리 생성중 에러: \(error)")
             }
         }
     }

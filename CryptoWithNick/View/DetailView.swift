@@ -76,32 +76,32 @@ extension DetailView {
             .padding(.leading, 20)
     }
     private var coinDescriptionSection: some View {
-            ZStack {
-                if let coinDescription = vm.coinDescriptions,
-                   !coinDescription.isEmpty {
-                    
-                    VStack {
-                        Text(coinDescription.removingHTMLOccurances)
-                            .foregroundColor(Color.theme.themeSecondary)
-                            .lineLimit(shortDescription ? 3 : .max)
-                        HStack {
-                            Button {
-                                withAnimation(.easeInOut) {
-                                    shortDescription.toggle()
-                                }
-                            } label: {
-                                Text(shortDescription ? "더보기" : "줄이기")
-                                    .font(.caption)
-                                    .fontWeight(.bold)
-                                    .padding(.vertical, 3)
+        ZStack {
+            if let coinDescription = vm.coinDescriptions,
+               !coinDescription.isEmpty {
+                
+                VStack {
+                    Text(coinDescription.removingHTMLOccurances)
+                        .foregroundColor(Color.theme.themeSecondary)
+                        .lineLimit(shortDescription ? 3 : .max)
+                    HStack {
+                        Button {
+                            withAnimation(.easeInOut) {
+                                shortDescription.toggle()
                             }
-                            .tint(.blue)
-                            Spacer()
+                        } label: {
+                            Text(shortDescription ? "더보기" : "줄이기")
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .padding(.vertical, 3)
                         }
-                    }.frame(maxWidth: .infinity,alignment: .leading)
-                }
+                        .tint(.blue)
+                        Spacer()
+                    }
+                }.frame(maxWidth: .infinity,alignment: .leading)
             }
         }
+    }
     private var overviewGrid: some View {
         LazyVGrid(columns: gridColumns, alignment: .leading, spacing: 30, pinnedViews: []) {
             ForEach(isDollar ? vm.overviewStatistic : vm.korOverviewStatistic) { stat in
@@ -127,7 +127,7 @@ extension DetailView {
             .foregroundColor(Color.theme.accent)
             .padding(.leading, 20)
     }
-        private var trailingItem: some View {
+    private var trailingItem: some View {
         HStack {
             Text(vm.coin.symbol.uppercased())
                 .font(.headline)

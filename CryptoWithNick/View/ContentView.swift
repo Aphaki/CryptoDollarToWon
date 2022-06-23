@@ -34,10 +34,10 @@ struct ContentView: View {
                                    destination: { DetailLoadingView(coin: $selectedCoin, isDollar: $isDollar) },
                                    label: {EmptyView()})
                 )
-            // 헤더(버튼 + 타이틀 + 버튼)
-            // 스탯뷰(시총 + 거래량 + 비트코인비율 + 포트폴리오 하루 변동성)
+            // 헤더 (버튼 + 타이틀 + 버튼)
+            // 스탯뷰 (시총 + 거래량 + 비트코인비율 + 포트폴리오 하루 변동성)
             // 서치바
-            // 칼럼 타이틀( coin , holdings, price, reload버튼 )
+            // 칼럼 타이틀( coin , holdings, price, reload 버튼 )
             VStack {
                 headerView
                     .padding(.horizontal, 10)
@@ -46,10 +46,11 @@ struct ContentView: View {
                 SearchBarView(searchBarText: $vm.searchBarText)
                     .padding(.horizontal, 20)
                 columnTitles
+                // 코인 리스트 (올 코인 or 포트폴리오 코인)
                 if !showFortfolio {
                     allCoinLists
-                    .transition(.move(edge: .leading))
-                    .padding(.horizontal, 10)
+                        .transition(.move(edge: .leading))
+                        .padding(.horizontal, 10)
                 } else {
                     ZStack(alignment: .top) {
                         fortfolioLists
@@ -58,7 +59,7 @@ struct ContentView: View {
                     }
                 }
             }
-            
+            // 로딩뷰
             if launchLoading {
                 LoadingView()
                     .onAppear {
@@ -84,7 +85,7 @@ extension ContentView {
                     }
                 }
                 .background(
-                CircleButtonAnymationView(animate: $showFortfolio)
+                    CircleButtonAnymationView(animate: $showFortfolio)
                 )
             ButtonView(iconName: isDollar ? "wonsign.circle.fill" : "dollarsign.circle.fill")
                 .onTapGesture {
@@ -140,9 +141,9 @@ extension ContentView {
                         .opacity(vm.sortOption == .holdings || vm.sortOption == .holdingsReversed
                                  ? 1.0 : 0.0)
                 }.frame(width: UIScreen.main.bounds.width / 4, alignment: .leading)
-                .onTapGesture {
-                    vm.sortOption = (vm.sortOption == .holdings ? .holdingsReversed : .holdings)
-                }
+                    .onTapGesture {
+                        vm.sortOption = (vm.sortOption == .holdings ? .holdingsReversed : .holdings)
+                    }
             }
             HStack(spacing: 0) {
                 HStack {
@@ -197,7 +198,7 @@ extension ContentView {
                         selectedCoin = coin
                         showDetailView.toggle()
                     }
-
+                
             }
             
         }.listStyle(PlainListStyle())

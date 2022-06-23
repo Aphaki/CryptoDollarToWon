@@ -117,13 +117,13 @@
 			isa = PBXGroup;
 			children = (
 				7F486ACF2836205D008ED742 /* ContentView.swift */,
-				7F335C35283794330052C3CE /* CoinRowView.swift */,
-				7F60DA742849D0B800AE75EE /* DetailView.swift */,
-				7FC3D7C728586C0A00E01104 /* InfoView.swift */,
-				7F4AAA49284DBA09006FD4F8 /* ChartView.swift */,
-				7F9A50B22844B69600CA70CC /* PortfolioView.swift */,
-				7F9A50B42844BC3600CA70CC /* CoinLogoView.swift */,
 				7F5200DF284372690047D623 /* HomeStatsView.swift */,
+				7F60DA742849D0B800AE75EE /* DetailView.swift */,
+				7F4AAA49284DBA09006FD4F8 /* ChartView.swift */,
+				7FC3D7C728586C0A00E01104 /* InfoView.swift */,
+				7F9A50B22844B69600CA70CC /* PortfolioView.swift */,
+				7F335C35283794330052C3CE /* CoinRowView.swift */,
+				7F9A50B42844BC3600CA70CC /* CoinLogoView.swift */,
 				7FBBAA85283F5C2300697868 /* SearchBarView.swift */,
 				7F93E407283632A000B90B34 /* ButtonView.swift */,
 				7F93E40B2836419900B90B34 /* CircleButtonAnymationView.swift */,
@@ -151,9 +151,9 @@
 				7F335C28283772AB0052C3CE /* CoinModel.swift */,
 				7F5200DB284369B70047D623 /* StatisticModel.swift */,
 				7F82976F284386DE00A48C9D /* GlobalCryptoData.swift */,
-				7FA832A82845981B0077B610 /* PortfolioContainer.xcdatamodeld */,
 				7F60DA762849DB6100AE75EE /* CoinDetailModel.swift */,
 				7FA12CDF2852337A00B18B03 /* ExchangeRateModel.swift */,
+				7FA832A82845981B0077B610 /* PortfolioContainer.xcdatamodeld */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -485,6 +485,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CryptoWithNick/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LiveCoin;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -515,6 +517,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CryptoWithNick/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LiveCoin;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

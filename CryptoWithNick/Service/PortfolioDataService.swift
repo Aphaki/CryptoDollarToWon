@@ -20,7 +20,7 @@ class PortfolioDataService {
         container = NSPersistentContainer(name: containerName)
         container.loadPersistentStores { _, error in
             if let error = error {
-                print("Error loading Core Data! \(error)")
+                print("코어데이터 로딩 에러: \(error)")
             }
             self.getPortfolio()
         }
@@ -47,7 +47,7 @@ class PortfolioDataService {
         do {
           savedEntities = try container.viewContext.fetch(request)
         } catch let error {
-            print("Error fatching Portfolio Entities. \(error)")
+            print("포트폴리오 Entities 가져올때 에러 발생: \(error)")
         }
     }
     
@@ -71,7 +71,7 @@ class PortfolioDataService {
         do {
             try container.viewContext.save()
         } catch let error {
-            print("Error saving to Core Data. \(error)")
+            print("코어데이터 저장중 에러발생: \(error)")
         }
     }
     private func applyChanges() {

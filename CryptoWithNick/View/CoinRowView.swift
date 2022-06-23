@@ -12,7 +12,6 @@ struct CoinRowView: View {
     let coin: CoinModel
     let isFortfolio: Bool
     @Binding var isDollar: Bool
-    @EnvironmentObject var vm: ContentViewModel
     
     var body: some View {
         HStack(spacing: 0){
@@ -37,12 +36,12 @@ struct CoinRowView_Previews: PreviewProvider {
             CoinRowView(coin: dev.coin, isFortfolio: true, isDollar: .constant(true))
                 .padding()
             .previewLayout(.sizeThatFits)
-            .environmentObject(ContentViewModel())
+            
             CoinRowView(coin: dev.krwCoin, isFortfolio: true, isDollar: .constant(true))
                 .padding()
             .previewLayout(.sizeThatFits)
             .preferredColorScheme(.dark)
-            .environmentObject(ContentViewModel())
+            
         }
     }
 }
