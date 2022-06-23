@@ -16,3 +16,9 @@
 
 
 ![다크모드](https://user-images.githubusercontent.com/90740892/175234784-54b0634c-de94-47b6-be20-385ea2bfc2f8.gif)
+
+
+2) 포트폴리오 기능
+
+
+![포트폴리오기능](https://user-images.githubusercontent.com/90740892/175236157-071bfeb6-b772-49e7-8868-98ba1ec5bc71.gif)
