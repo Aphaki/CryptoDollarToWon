@@ -38,3 +38,11 @@
 ![크립토상세보기](https://user-images.githubusercontent.com/90740892/175240553-4c394d92-c08d-4d24-b14f-f3b60ec7f8d1.gif)
 
 
+4) 마켓 정보 (마켓 시총, 1일거래량, BTC 비율, 마이포트폴리오 총액)
+
+
+<img width="289" alt="스크린샷 2022-06-23 오후 4 28 02" src="https://user-images.githubusercontent.com/90740892/175241724-61541947-e0d4-4b0f-8a37-877aaad23ae5.png">
+<img width="289" alt="스크린샷 2022-06-23 오후 4 28 08" src="https://user-images.githubusercontent.com/90740892/175241803-43faf109-b922-495d-ac91-64e5f8d2fe7e.png">
+
+
+
