@@ -8,6 +8,13 @@
   
 ![LiveCoinAppPreviews](https://user-images.githubusercontent.com/90740892/175232662-19c175b2-357d-4097-b82c-c8c02fdf654d.gif)
 
+<img width="325" alt="스크린샷 2022-06-23 오후 4 05 50" src="https://user-images.githubusercontent.com/90740892/175236862-46e92264-da7d-4fb5-bf6c-9a01ea4babbc.png">
+
+
+<img width="325" alt="스크린샷 2022-06-23 오후 4 06 06" src="https://user-images.githubusercontent.com/90740892/175236913-1fd43a36-5b1e-4e48-9ec9-66aadb36ee16.png">
+
+
+
 
 앱 특징:
 
