@@ -45,4 +45,13 @@
 <img width="289" alt="스크린샷 2022-06-23 오후 4 28 08" src="https://user-images.githubusercontent.com/90740892/175241803-43faf109-b922-495d-ac91-64e5f8d2fe7e.png">
 
 
+5) 상단버튼 클릭으로 달러로 표시된 모든 정보 현재 원화로 가치로 환산가능(실시간 가격, 시가총액, 그래프 눈금 등등)
+
+
+6) 정렬기능(코인 랭킹, 가격, 홀딩액 -> 세가지 특징으로 정렬가능)
+
+
+
+
+![CoinSorting](https://user-images.githubusercontent.com/90740892/175243518-fe6641a0-0b19-49ee-9284-41b7abca6664.gif)
 
