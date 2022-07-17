@@ -28,7 +28,7 @@ class ContentViewModel: ObservableObject {
     private let portfolioDataService = PortfolioDataService()
     private var cancellable = Set<AnyCancellable>()
     
-    
+    // 정렬 옵션
     enum SortOption {
         case rank, rankReversed, price, priceReversed, holdings, holdingsReversed
     }
@@ -87,50 +87,53 @@ class ContentViewModel: ObservableObject {
                 self?.krwPortfolioCoins = returnedPortCoins
             }
             .store(in: &cancellable)
+        // 마켓데이터 원화로 업데이트
         marketDataService.$marketData
             .combineLatest($krwPortfolioCoins, exchangeRateService.$usdModel)
-            .map { (marketData, krwPortCoins, usdModel) -> [StatisticModel] in
-                var stats: [StatisticModel] = []
-                guard
-                    let data = marketData,
-                    let unwrapedUSDModel = usdModel,
-                    let rate = Double(unwrapedUSDModel.dealBasR.removeingComma)
-                else {
-                   return stats
-                }
-                
-                let marketCapValue = (data.rawMarketCap * rate)
-                let marketCapModel = StatisticModel(title: "시가총액", value: "₩" + marketCapValue.formattedWithAbbreviations(), percentageChange: data.marketCapChangePercentage24HUsd)
-                
-                let volumeModel = StatisticModel(title: "24H 거래량", value: data.volume)
-                
-                let btcDominanceModel = StatisticModel(title: "BTC 비율", value: data.btcDominance)
-                
-                let portfolioValue = krwPortCoins.map { coin in
-                    return coin.currentHoldingsValue
-                }.reduce(0, +)
-                let previousValue = krwPortCoins.map { (coin) -> Double in
-                    let currentValue = coin.currentHoldingsValue
-                    let percentChange = coin.priceChangePercentage24H ?? 0 / 100
-                    let previousValue = currentValue / (1 + percentChange)
-                    return previousValue
-                }.reduce(0, +)
-                let percentageChange = ((portfolioValue - previousValue) / previousValue)
-                let krwPortModel = StatisticModel(title: "포트폴리오", value: portfolioValue.asWonCurrency(), percentageChange: percentageChange)
-                
-                stats.append(contentsOf: [
-                  marketCapModel,
-                  volumeModel,
-                  btcDominanceModel,
-                  krwPortModel
-                ])
-                return stats
-            }
+            .map(mappingMarketDataToWon)
             .receive(on: DispatchQueue.main)
             .sink {[weak self] krwStats in
                 self?.krwStatistics = krwStats
                 self?.isLoading = false
             }.store(in: &cancellable)
+    }
+    func mappingMarketDataToWon(marketData: DataClass?, krwPortCoins: [CoinModel], usdModel: ExchangeRateModel?) -> [StatisticModel]{
+        var stats: [StatisticModel] = []
+        
+        guard
+            let data = marketData,
+            let unwrapedUSDModel = usdModel,
+            let rate = Double(unwrapedUSDModel.dealBasR.removeingComma)
+        else {
+           return stats
+        }
+        
+        let marketCapValue = (data.rawMarketCap * rate)
+        let marketCapModel = StatisticModel(title: "시가총액", value: "₩" + marketCapValue.formattedWithAbbreviations(), percentageChange: data.marketCapChangePercentage24HUsd)
+        
+        let volumeModel = StatisticModel(title: "24H 거래량", value: data.volume)
+        
+        let btcDominanceModel = StatisticModel(title: "BTC 비율", value: data.btcDominance)
+        
+        let portfolioValue = krwPortCoins.map { coin in
+            return coin.currentHoldingsValue
+        }.reduce(0, +)
+        let previousValue = krwPortCoins.map { (coin) -> Double in
+            let currentValue = coin.currentHoldingsValue
+            let percentChange = coin.priceChangePercentage24H ?? 0 / 100
+            let previousValue = currentValue / (1 + percentChange)
+            return previousValue
+        }.reduce(0, +)
+        let percentageChange = ((portfolioValue - previousValue) / previousValue)
+        let krwPortModel = StatisticModel(title: "포트폴리오", value: portfolioValue.asWonCurrency(), percentageChange: percentageChange)
+        
+        stats.append(contentsOf: [
+          marketCapModel,
+          volumeModel,
+          btcDominanceModel,
+          krwPortModel
+        ])
+        return stats
     }
     
     func updatePortfolio(coin: CoinModel, amount: Double) {
